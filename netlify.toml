@@ -1,3 +1,4 @@
+
 [build]
   # Build command
   command = "npm run build"
