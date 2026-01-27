@@ -1,0 +1,228 @@
+==============================================
+EmailJS Setup Guide for GameDen Booking System
+==============================================
+
+CREDENTIALS (Already Configured):
+----------------------------------
+✅ Public Key: BgW_77sYF0GCf324B
+✅ Private Key: LmpYLJdz65kOCMnRfuQJZ
+✅ Service ID: service_bkpzdtp
+✅ Admin Email: gamedenoffiz@gmail.com
+
+
+TEMPLATES REQUIRED:
+-------------------
+1. template_ycggzo9 - Admin notification (✅ Already created)
+2. template_nsud4g1 - Customer confirmation (✅ Already created)
+
+
+STEP 1A: Admin Template (DONE)
+-------------------------------
+✅ TEMPLATE ALREADY CREATED!
+Template ID: template_ycggzo9 (Already configured in code)
+
+You can edit this template at:
+https://dashboard.emailjs.com/admin/templates/template_ycggzo9
+
+
+STEP 1B: Customer Confirmation Template (DONE)
+-----------------------------------------------
+✅ TEMPLATE ALREADY CREATED!
+Template ID: template_nsud4g1 (Already configured in code)
+
+You can edit this template at:
+https://dashboard.emailjs.com/admin/templates/template_nsud4g1
+
+STEP 2: Customer Confirmation Email Template Design (REFERENCE - Already Created)
+----------------------------------------------------------------------------------
+Template ID: template_nsud4g1
+
+If you need to customize, here's the recommended template content:
+
+SUBJECT:
+--------
+🎮 Booking Confirmed - GameDen - {{gaming_type}}
+
+BODY (HTML):
+------------
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
+  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+    <h1 style="color: white; margin: 0; font-size: 28px;">✅ Booking Confirmed!</h1>
+  </div>
+  
+  <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <p style="font-size: 18px; color: #333; margin-bottom: 20px;">Hi {{customer_name}},</p>
+    
+    <p style="color: #666; line-height: 1.6;">
+      Thank you for booking with <strong>GameDen</strong>! Your gaming session has been successfully confirmed.
+    </p>
+
+    <h2 style="color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-top: 30px;">Your Booking Details</h2>
+    
+    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0;">
+      <p style="margin: 10px 0;"><strong>Console:</strong> {{gaming_type}}</p>
+      <p style="margin: 10px 0;"><strong>Date:</strong> {{booking_date}}</p>
+      <p style="margin: 10px 0;"><strong>Time:</strong> {{time_slot}}</p>
+      <p style="margin: 10px 0;"><strong>Duration:</strong> {{duration}}</p>
+      <p style="margin: 10px 0;"><strong>Players:</strong> {{number_of_players}}</p>
+      <p style="margin: 10px 0; font-size: 20px; color: #667eea;"><strong>Total Amount:</strong> {{total_price}}</p>
+    </div>
+
+    <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px;">
+      <p style="margin: 0; color: #856404; font-weight: bold;">⚠️ Important Reminders:</p>
+      <ul style="margin: 10px 0; padding-left: 20px; color: #856404;">
+        <li>Please arrive 10 minutes before your scheduled time</li>
+        <li>Bring a valid ID for verification</li>
+        <li>Payment is due at the venue</li>
+      </ul>
+    </div>
+
+    <div style="background-color: #e7f3ff; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+      <h3 style="color: #0066cc; margin-top: 0;">GameDen Location</h3>
+      <p style="color: #333; margin: 5px 0;">Open Daily: Mon-Sun, 11 AM - 11 PM</p>
+      <p style="color: #666; margin: 5px 0;">Contact: {{customer_phone}}</p>
+    </div>
+
+    <p style="color: #666; line-height: 1.6; margin-top: 30px;">
+      We look forward to seeing you! Get ready for an amazing gaming experience.
+    </p>
+
+    <p style="color: #666; margin-top: 20px;">
+      Best regards,<br>
+      <strong style="color: #667eea;">The GameDen Team</strong>
+    </p>
+
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+      <p style="color: #999; font-size: 12px; margin: 0;">
+        This is an automated confirmation email from GameDen
+      </p>
+      <p style="color: #999; font-size: 12px; margin: 5px 0;">
+        If you didn't make this booking, please contact us immediately
+      </p>
+    </div>
+  </div>
+</div>
+
+STEP 3: Admin Email Template (REFERENCE - Already Created)
+-----------------------------------------------------------
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f4f4f4;">
+  <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 10px 10px 0 0; text-align: center;">
+    <h1 style="color: white; margin: 0; font-size: 28px;">🎮 New Booking Alert!</h1>
+  </div>
+  
+  <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <h2 style="color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">Booking Details</h2>
+    
+    <div style="margin: 20px 0;">
+      <p style="margin: 10px 0;"><strong>Console:</strong> {{gaming_type}}</p>
+      <p style="margin: 10px 0;"><strong>Date:</strong> {{booking_date}}</p>
+      <p style="margin: 10px 0;"><strong>Time:</strong> {{time_slot}}</p>
+      <p style="margin: 10px 0;"><strong>Duration:</strong> {{duration}}</p>
+      <p style="margin: 10px 0;"><strong>Players:</strong> {{number_of_players}}</p>
+      <p style="margin: 10px 0; font-size: 20px; color: #667eea;"><strong>Total Price:</strong> {{total_price}}</p>
+    </div>
+
+    <h2 style="color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-top: 30px;">Customer Information</h2>
+    
+    <div style="margin: 20px 0;">
+      <p style="margin: 10px 0;"><strong>Name:</strong> {{customer_name}}</p>
+      <p style="margin: 10px 0;"><strong>Email:</strong> {{customer_email}}</p>
+      <p style="margin: 10px 0;"><strong>Phone:</strong> {{customer_phone}}</p>
+    </div>
+
+    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 30px; border-left: 4px solid #667eea;">
+      <p style="margin: 0; color: #666; font-size: 14px;">
+        ⚠️ <strong>Action Required:</strong> Please confirm this booking with the customer and prepare the gaming setup.
+      </p>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+      <p style="color: #999; font-size: 12px; margin: 0;">This is an automated email from GameDen Booking System</p>
+    </div>
+  </div>
+</div>
+
+STEP 4: Configure Template Variables
+-------------------------------------
+Make sure these variables are mapped in BOTH templates:
+
+For Admin Template (template_ycggzo9):
+- {{to_email}} → gamedenoffiz@gmail.com
+
+For Customer Template (template_nsud4g1):
+- {{to_email}} → {{customer_email}} (customer's email)
+
+Common Variables for Both:
+- {{customer_name}} → Customer's full name
+- {{customer_email}} → Customer's email
+- {{customer_phone}} → Customer's phone number
+- {{gaming_type}} → Console type (PS4/PS4 Pro/Racing Wheel)
+- {{booking_date}} → Formatted booking date
+- {{time_slot}} → Booking time slot
+- {{duration}} → Session duration
+- {{number_of_players}} → Number of players
+- {{total_price}} → Total booking cost in ₹
+
+STEP 5: Test Both Email Templates
+----------------------------------
+1. Save both templates
+2. Use the "Test" button in EmailJS dashboard for each
+3. Admin template: Check gamedenoffiz@gmail.com
+4. Customer template: Use your own email for testing
+
+STEP 6: Verify Integration
+---------------------------
+After setup is complete:
+1. Go to your website: http://localhost:5174/book
+2. Make a test booking
+3. Fill all details and confirm
+4. Check browser console for:
+   - ✅ Booking saved successfully
+   - 📧 Sending email notification to admin
+   - ✅ Admin email sent successfully
+   - 📧 Sending confirmation email to customer
+   - ✅ Customer confirmation email sent successfully
+5. Check BOTH inboxes:
+   - gamedenoffiz@gmail.com (admin notification)
+   - Customer email (booking confirmation)
+
+IMPORTANT NOTES:
+----------------
+- TWO emails are sent per booking:
+  1. Admin notification (template_ycggzo9) ✅ Working
+  2. Customer confirmation (template_nsud4g1) ✅ Working
+- Emails are sent AFTER booking is saved to Firebase
+- If emails fail, booking will still be created (non-blocking)
+- All email sending is logged in browser console
+
+EMAIL FLOW:
+-----------
+1. Customer fills booking form
+2. Customer enters contact info (name, phone, email)
+3. Booking saved to Firebase Firestore ✅
+4. Admin email sent to gamedenoffiz@gmail.com 📧
+5. Customer confirmation sent to customer's email 📧
+6. Customer sees confirmation modal ✅
+7. Admin receives booking notification 📬
+8. Customer receives booking confirmation 📬
+
+TROUBLESHOOTING:
+----------------
+If emails not sending:
+- Check browser console for errors
+- Verify EmailJS credentials are correct
+- Ensure BOTH templates exist in EmailJS dashboard:
+  * template_ycggzo9 (admin) ✅
+  * template_nsud4g1 (customer) ✅
+- Check EmailJS monthly quota (free tier: 200 emails/month)
+- Verify email addresses are correct
+
+==============================================
+Configuration Complete! ✅
+==============================================
+Admin Template: template_ycggzo9 ✅ Working
+Customer Template: template_nsud4g1 ✅ Working
+
+Both email notifications are fully configured!
+System ready to send emails on every booking.
+==============================================

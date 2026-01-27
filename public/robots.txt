@@ -1,0 +1,10 @@
+# GameDen Robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Sitemap
+Sitemap: http://gamedenbookings.fun/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1

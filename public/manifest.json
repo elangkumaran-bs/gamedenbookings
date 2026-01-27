@@ -1,0 +1,26 @@
+{
+  "name": "GameDen - Premium PS4 Gaming Lounge",
+  "short_name": "GameDen",
+  "description": "Book your premium PlayStation 4 gaming session online at GameDen in Gobichettipalayam. PS4, PS4 Pro, Racing Wheel, Latest Games.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/gameden-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/gameden-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["entertainment", "games", "lifestyle"],
+  "lang": "en-IN"
+}
