@@ -23,67 +23,114 @@ const DURATION_OPTIONS = [
 ];
 
 const RACING_WHEEL_DURATION_OPTIONS = [
-  { minutes: 30, price: 250 },
-  { minutes: 60, price: 500 },
-  { minutes: 90, price: 750 },
-  { minutes: 120, price: 1000 }
+  { minutes: 60, price: 250 },
+  { minutes: 120, price: 500 },
+  { minutes: 180, price: 750 },
+  { minutes: 240, price: 1000 }
 ];
 
 export default function BookingDetailsSection({ onProceed }: BookingDetailsSectionProps) {
-  const [console, setConsole] = useState('');
+  const [gamingType, setGamingType] = useState('');
   const [date, setDate] = useState('');
-  const [timeSlot, setTimeSlot] = useState('');
+  const [selectedSlots, setSelectedSlots] = useState<string[]>([]);
   const [duration, setDuration] = useState(1);
   const [players, setPlayers] = useState(1);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const isRacingWheel = console === 'Racing Wheel';
+  const isRacingWheel = gamingType.includes('Racing Wheel');
+  
+  // Calculate duration based on selected slots
+  const calculatedDuration = isRacingWheel ? selectedSlots.length * 60 : selectedSlots.length;
+  const effectiveDuration = selectedSlots.length > 0 ? calculatedDuration : duration;
   
   const basePrice = isRacingWheel 
-    ? RACING_WHEEL_DURATION_OPTIONS.find(d => d.minutes === duration)?.price || (duration / 30) * 250
-    : DURATION_OPTIONS.find(d => d.hours === duration)?.price || duration * 100;
+    ? RACING_WHEEL_DURATION_OPTIONS.find(d => d.minutes === effectiveDuration)?.price || (effectiveDuration / 60) * 250
+    : DURATION_OPTIONS.find(d => d.hours === effectiveDuration)?.price || effectiveDuration * 100;
   const totalCost = isRacingWheel ? basePrice : basePrice * players;
 
-  useEffect(() => {
-    if (console && date) {
-      fetchBookedSlots();
-    }
-  }, [console, date]);
+  const timeSlot = selectedSlots[0] || ''; // First selected slot is the start time
 
   useEffect(() => {
-    // Reset duration when console changes
+    if (gamingType && date) {
+      fetchBookedSlots();
+    }
+  }, [gamingType, date]);
+
+  useEffect(() => {
+    // Reset duration when gaming type changes
     if (isRacingWheel) {
-      setDuration(30); // Default to 30 minutes for Racing Wheel
+      setDuration(60); // Default to 60 minutes for Racing Wheel
       setPlayers(1); // Always 1 player for Racing Wheel
     } else {
       setDuration(1); // Default to 1 hour for PS4
     }
-  }, [console]);
+    setSelectedSlots([]); // Reset selected slots when gaming type changes
+  }, [gamingType, isRacingWheel]);
+
+  // Update duration when selected slots change
+  useEffect(() => {
+    if (selectedSlots.length > 0) {
+      const newDuration = isRacingWheel ? selectedSlots.length * 60 : selectedSlots.length;
+      setDuration(newDuration);
+    }
+  }, [selectedSlots, isRacingWheel]);
 
   const fetchBookedSlots = async () => {
     setLoading(true);
     try {
-      const slots = await getBookedSlots(console, date);
+      const slots = await getBookedSlots(gamingType, date);
       setBookedSlots(slots);
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error fetching booked slots:', error);
     } finally {
       setLoading(false);
     }
   };
 
+  const handleSlotClick = (slot: string) => {
+    const slotIndex = TIME_SLOTS.indexOf(slot);
+    
+    if (selectedSlots.includes(slot)) {
+      // Deselect slot
+      setSelectedSlots(selectedSlots.filter(s => s !== slot));
+    } else {
+      // Select slot - add to consecutive selection
+      if (selectedSlots.length === 0) {
+        // First slot selected
+        setSelectedSlots([slot]);
+      } else {
+        // Check if slot is consecutive
+        const currentIndices = selectedSlots.map(s => TIME_SLOTS.indexOf(s)).sort((a, b) => a - b);
+        const minIndex = Math.min(...currentIndices);
+        const maxIndex = Math.max(...currentIndices);
+        
+        if (slotIndex === maxIndex + 1) {
+          // Extending forward
+          setSelectedSlots([...selectedSlots, slot]);
+        } else if (slotIndex === minIndex - 1) {
+          // Extending backward
+          setSelectedSlots([slot, ...selectedSlots]);
+        } else {
+          // Non-consecutive, start new selection
+          setSelectedSlots([slot]);
+        }
+      }
+    }
+  };
+
   const handleConfirmBooking = () => {
-    if (!console || !date || !timeSlot || !duration) {
-      alert('Please fill in all required fields');
+    if (!gamingType || !date || selectedSlots.length === 0) {
+      alert('Please fill in all required fields and select at least one time slot');
       return;
     }
 
     onProceed({
-      console,
+      console: gamingType,
       date,
-      timeSlot,
-      duration,
+      timeSlot: selectedSlots[0], // Use first slot as start time
+      duration: effectiveDuration,
       players,
       basePrice,
       totalCost
@@ -113,15 +160,15 @@ export default function BookingDetailsSection({ onProceed }: BookingDetailsSecti
             Console Selection <span className="text-red-400">*</span>
           </label>
           <select
-            value={console}
-            onChange={(e) => setConsole(e.target.value)}
+            value={gamingType}
+            onChange={(e) => setGamingType(e.target.value)}
             className="w-full px-4 py-3 bg-white/10 border-2 border-white/30 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all text-white backdrop-blur-sm [&>option]:text-gray-900 [&>option]:bg-white"
             required
           >
             <option value="">Select Console</option>
-            <option value="PlayStation 4">PlayStation 4 – Standard gaming experience</option>
-            <option value="PlayStation 4 Pro">PlayStation 4 Pro – Enhanced 4K gaming</option>
-            <option value="Racing Wheel">Racing Wheel Experience - ₹250 per 30 min</option>
+            <option value="Console Gaming (PlayStation 4)">PlayStation 4 – Standard gaming experience</option>
+            <option value="Console Gaming (PlayStation 4 Pro)">PlayStation 4 Pro – Enhanced 4K gaming</option>
+            <option value="Racing Wheel Experience (Wheel & Pedals & Shifters)">Racing Wheel Experience - ₹250 per 60 min</option>
           </select>
         </div>
 
@@ -145,7 +192,7 @@ export default function BookingDetailsSection({ onProceed }: BookingDetailsSecti
           )}
         </div>
 
-        {console && date && (
+        {gamingType && date && (
           <div>
             <label className="flex items-center gap-2 text-white font-semibold mb-3 drop-shadow">
               <Clock className="w-5 h-5 text-blue-400" />
@@ -159,25 +206,42 @@ export default function BookingDetailsSection({ onProceed }: BookingDetailsSecti
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                 {TIME_SLOTS.map((slot) => {
                   const isBooked = bookedSlots.includes(slot);
+                  const isSelected = selectedSlots.includes(slot);
+                  const slotPosition = selectedSlots.indexOf(slot);
+                  
                   return (
                     <button
                       key={slot}
                       type="button"
-                      onClick={() => !isBooked && setTimeSlot(slot)}
+                      onClick={() => !isBooked && handleSlotClick(slot)}
                       disabled={isBooked}
-                      className={`px-4 py-3 rounded-lg font-semibold transition-all ${
+                      className={`px-4 py-3 rounded-lg font-semibold transition-all relative ${
                         isBooked
                           ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed backdrop-blur-sm'
-                          : timeSlot === slot
-                          ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105 backdrop-blur-xl'
-                          : 'bg-white/10 border-2 border-white/30 text-white hover:border-blue-400 hover:bg-white/20 backdrop-blur-sm'
+                          : isSelected
+                          ? slotPosition === 0
+                            ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg transform scale-105 backdrop-blur-xl ring-2 ring-white/50'
+                            : 'bg-gradient-to-r from-blue-400 to-purple-500 text-white shadow-md backdrop-blur-xl'
+                          : 'bg-white/10 border-2 border-white/30 text-white hover:border-blue-400 hover:bg-white/20 backdrop-blur-sm hover:scale-105'
                       }`}
                     >
                       {slot}
                       {isBooked && <div className="text-xs mt-1">Booked</div>}
+                      {isSelected && slotPosition === 0 && <div className="text-xs mt-1">Start</div>}
+                      {isSelected && slotPosition > 0 && <div className="text-xs mt-1">+{slotPosition}hr</div>}
                     </button>
                   );
                 })}
+              </div>
+            )}
+            {selectedSlots.length > 0 && (
+              <div className="mt-3 p-3 bg-blue-500/20 border border-blue-400/50 rounded-lg">
+                <p className="text-sm text-blue-200 drop-shadow">
+                  📅 Selected {selectedSlots.length} slot{selectedSlots.length > 1 ? 's' : ''}: {selectedSlots.join(', ')}
+                </p>
+                <p className="text-xs text-blue-300 mt-1">
+                  Duration: {isRacingWheel ? `${effectiveDuration} minutes` : `${effectiveDuration} hour${effectiveDuration > 1 ? 's' : ''}`} • Price: ₹{basePrice}
+                </p>
               </div>
             )}
           </div>
@@ -185,35 +249,32 @@ export default function BookingDetailsSection({ onProceed }: BookingDetailsSecti
 
         <div>
           <label className="block text-white font-semibold mb-3 drop-shadow">
-            Duration Dropdown <span className="text-red-400">*</span>
+            Duration {selectedSlots.length > 0 && <span className="text-blue-300 text-sm">(Auto-calculated from selected slots)</span>}
           </label>
           {isRacingWheel ? (
             <select
-              value={duration}
-              onChange={(e) => setDuration(Number(e.target.value))}
-              className="w-full px-4 py-3 bg-white/10 border-2 border-white/30 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all text-white backdrop-blur-sm [&>option]:text-gray-900 [&>option]:bg-white"
-              required
+              value={effectiveDuration}
+              disabled
+              className="w-full px-4 py-3 bg-white/5 border-2 border-white/20 rounded-lg text-white backdrop-blur-sm [&>option]:text-gray-900 [&>option]:bg-white opacity-75"
             >
-              {RACING_WHEEL_DURATION_OPTIONS.map((option) => (
-                <option key={option.minutes} value={option.minutes}>
-                  {option.minutes} Minutes – ₹{option.price}
-                </option>
-              ))}
+              <option value={effectiveDuration}>
+                {effectiveDuration} Minutes – ₹{basePrice}
+              </option>
             </select>
           ) : (
             <select
-              value={duration}
-              onChange={(e) => setDuration(Number(e.target.value))}
-              className="w-full px-4 py-3 bg-white/10 border-2 border-white/30 rounded-lg focus:border-blue-400 focus:ring-2 focus:ring-blue-400/50 transition-all text-white backdrop-blur-sm [&>option]:text-gray-900 [&>option]:bg-white"
-              required
+              value={effectiveDuration}
+              disabled
+              className="w-full px-4 py-3 bg-white/5 border-2 border-white/20 rounded-lg text-white backdrop-blur-sm [&>option]:text-gray-900 [&>option]:bg-white opacity-75"
             >
-              {DURATION_OPTIONS.map((option) => (
-                <option key={option.hours} value={option.hours}>
-                  {option.hours} Hour{option.hours > 1 ? 's' : ''} – ₹{option.price}
-                </option>
-              ))}
+              <option value={effectiveDuration}>
+                {effectiveDuration} Hour{effectiveDuration > 1 ? 's' : ''} – ₹{basePrice}
+              </option>
             </select>
           )}
+          <p className="text-xs text-gray-300 mt-2">
+            💡 Click time slots above to select your booking duration
+          </p>
         </div>
 
         {!isRacingWheel && (

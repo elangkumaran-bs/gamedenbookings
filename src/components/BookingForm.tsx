@@ -127,7 +127,7 @@ export default function BookingForm() {
                   <option value="">Select gaming type</option>
                   <option value="Console Gaming (PlayStation 4)">Console Gaming (PlayStation 4)</option>
                   <option value="Console Gaming (PlayStation 4 Pro)">Console Gaming (PlayStation 4 Pro)</option>
-                  <option value="Racing Wheel Experience (Wheel & Pedals & Shifters)">Racing Wheel Experience - ₹250 per 30 min</option>
+                  <option value="Racing Wheel Experience (Wheel & Pedals & Shifters)">Racing Wheel Experience - ₹250 per 60 min</option>
                 </LiquidGlassSelect>
               </div>
 
@@ -157,10 +157,10 @@ export default function BookingForm() {
                       onChange={(e) => setDuration(Number(e.target.value))}
                       required
                     >
-                      <option value={30}>30 minutes - ₹250</option>
-                      <option value={60}>60 minutes - ₹500</option>
-                      <option value={90}>90 minutes - ₹750</option>
-                      <option value={120}>120 minutes - ₹1000</option>
+                      <option value={60}>60 minutes - ₹250</option>
+                      <option value={120}>120 minutes - ₹500</option>
+                      <option value={180}>180 minutes - ₹750</option>
+                      <option value={240}>240 minutes - ₹1000</option>
                     </LiquidGlassSelect>
                   ) : (
                     <LiquidGlassInput

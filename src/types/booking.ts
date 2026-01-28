@@ -11,6 +11,7 @@ export interface Booking {
   totalPrice: number;
   status?: string;
   createdAt: Date;
+  linkedBookingId?: string; // For Racing Wheel <-> PS4 Standard linking
 }
 
 export interface TimeSlot {

@@ -37,7 +37,7 @@ export default function Header() {
   return (
     <>
       {/* Dynamic Island Navbar */}
-      <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-out w-[95%] sm:w-auto max-w-6xl animate-slideDown">
+      <header className="fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ease-out w-[95%] sm:w-auto max-w-6xl animate-navbarAppear">
         <nav className={`
           relative overflow-hidden rounded-full
           backdrop-blur-xl bg-white/70 dark:bg-gray-900/70

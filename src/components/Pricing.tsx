@@ -62,7 +62,7 @@ const pricingTiers: PricingTier[] = [
   {
     name: 'Racing Wheel',
     price: '₹250',
-    duration: 'for 30 minutes',
+    duration: 'per hour',
     icon: Gauge,
     racing: true,
     features: [

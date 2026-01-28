@@ -55,7 +55,7 @@ export default function GamingWheel() {
             <LiquidGlassCard className="p-6 mb-8" hover={false}>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-2xl font-bold text-white">₹250</span>
-                <span className="text-gray-300">per 30 minutes</span>
+                <span className="text-gray-300">per 60 minutes</span>
               </div>
               <p className="text-sm text-gray-300">Extendable in 30-minute increments</p>
             </LiquidGlassCard>
@@ -78,11 +78,10 @@ export default function GamingWheel() {
                 className="w-full h-auto rounded-xl shadow-2xl"
               />
               <div className="absolute -top-4 -right-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-6 rounded-2xl shadow-2xl transform rotate-3">
-                <div className="text-3xl font-bold">30 min</div>
+                <div className="text-3xl font-bold">60 min</div>
                 <div className="text-sm">Session</div>
               </div>
             </LiquidGlassCard>
-
             <div className="mt-6 grid grid-cols-3 gap-4">
               <LiquidGlassCard className="p-4 text-center" hover={false}>
                 <div className="text-2xl font-bold text-white mb-1">1</div>
